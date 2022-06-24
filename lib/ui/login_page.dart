@@ -152,14 +152,14 @@ class _LoginPageState extends State<LoginPage> {
                             SimpleAlertDialog.showSimpleAlertDialog(
                                 context,
                                 'Message',
-                                'The text entered is palindrome', () {
+                                'isPalindrome', () {
                               Navigator.pop(context);
                             });
                           } else {
                             SimpleAlertDialog.showSimpleAlertDialog(
                                 context,
                                 'Message',
-                                'The text entered is not a palindromee', () {
+                                'not Palindrome', () {
                               Navigator.pop(context);
                             });
                           }
