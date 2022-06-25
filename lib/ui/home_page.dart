@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:suitmedia_test_flutter_dev/bloc/handle_local/user_choosed_bloc.dart';
 import 'package:suitmedia_test_flutter_dev/helper/color_helper.dart';
-import 'package:suitmedia_test_flutter_dev/model/user.dart';
 import 'package:suitmedia_test_flutter_dev/model/user_choosed.dart';
-import 'package:suitmedia_test_flutter_dev/service/api_service.dart';
 import 'package:suitmedia_test_flutter_dev/ui/user_list_page.dart';
 import 'package:suitmedia_test_flutter_dev/ui/webview_page.dart';
 import 'package:suitmedia_test_flutter_dev/ui/widget/primary_button.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/homePage';
@@ -20,26 +19,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final APIService _apiService = APIService();
-
-  @override
-  void initState() {
-    super.initState();
-    _apiService.getUserList(1, 10).then((value) {
-      print(userToJson(value));
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserChoosedBloc, UserChoosed>(builder: (context, state) {
       return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          leading: GestureDetector(
+              child: SvgPicture.asset('assets/images/ic_arrow_left.svg',
+                 ),
+              onTap: () {
+                Navigator.of(context).pop();
+              }),
           middle: state.id == 0 && state.firstName!.isEmpty
               ? const Text(
                   'Home Page',
                   style: TextStyle(
-                      color: ColorHelper.appBar,
+                      color: ColorHelper.primary,
                       fontSize: 18,
                       fontWeight: FontWeight.w600),
                 )
@@ -50,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               height: double.infinity,
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: BlocBuilder<UserChoosedBloc, UserChoosed>(
                   builder: (context, state) {
                 if (state.id == 0 && state.firstName!.isEmpty) {
@@ -100,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                     color: Colors.grey[300], shape: BoxShape.circle),
                 child: const CircleAvatar(
+                  backgroundColor: Colors.grey,
                   backgroundImage: AssetImage('assets/images/empty_user.png'),
                 ),
               ),
@@ -211,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xff2B637B),
+                          color: ColorHelper.primary,
                           decoration: TextDecoration.underline)),
                 ),
               ),

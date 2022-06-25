@@ -41,10 +41,10 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.white,
             image: DecorationImage(
               image: AssetImage('assets/images/login_bacground.png'),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: BoxDecoration(
                     color: Colors.grey[300], shape: BoxShape.circle),
                 child: const CircleAvatar(
+                  backgroundColor: Color(0xff9CC6CD),
                   backgroundImage: AssetImage('assets/images/ic_photo.png'),
                 ),
               ),

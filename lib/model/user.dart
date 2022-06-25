@@ -6,20 +6,20 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
-    required this.page,
-    required this.perPage,
-    required this.total,
-    required this.totalPages,
+    this.page,
+    this.perPage,
+    this.total,
+    this.totalPages,
     this.data,
-    required this.support,
+    this.support,
   });
 
-  int page;
-  int perPage;
-  int total;
-  int totalPages;
+  int? page;
+  int? perPage;
+  int? total;
+  int? totalPages;
   List<DataUser>? data;
-  Support support;
+  Support? support;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         page: json["page"],
@@ -37,7 +37,7 @@ class User {
         "total": total,
         "total_pages": totalPages,
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-        "support": support.toJson(),
+        "support": support!.toJson(),
       };
 }
 

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:suitmedia_test_flutter_dev/bloc/event/choosing_user_event.dart';
 import 'package:suitmedia_test_flutter_dev/bloc/event/user_event.dart';
@@ -26,36 +29,46 @@ class _UserListPageState extends State<UserListPage> {
   final ScrollController _scrollController = ScrollController();
   bool _finishPage = false;
   int _currentPage = 1;
+
+  void _loadMore() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (_finishPage) {
+          print('finish');
+        } else {
+          context.read<UserBloc>()
+            ..page += 1
+            ..add(GetMoreUserList());
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     context.read<UserBloc>().add(GetUserList());
     context.read<UserBloc>().page = 1;
+    _finishPage = false;
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // if (_finishPage) {
-        //   print('false');
-        // } else {
-        _finishPage = true;
-        _currentPage += 1;
-
-        context.read<UserBloc>()
-          ..page += 1
-          ..add(GetMoreUserList());
-        // }
-      }
+    Timer(Duration.zero, () {
+      _loadMore();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Users',
+      navigationBar: CupertinoNavigationBar(
+        leading: GestureDetector(
+            child: SvgPicture.asset('assets/images/ic_arrow_left.svg'),
+            onTap: () {
+              Navigator.of(context).pop();
+            }),
+        middle: const Text('Users',
             style: TextStyle(
-                color: ColorHelper.appBar,
+                color: ColorHelper.primary,
                 fontSize: 18,
                 fontWeight: FontWeight.w600)),
       ),
@@ -72,17 +85,12 @@ class _UserListPageState extends State<UserListPage> {
             }
 
             if (state is UserMoreSuccess) {
-              print('more:' + userToJson(state.user));
               if (state.user.data!.isNotEmpty) {
                 _listDataUser.addAll(state.user.data!);
+                _currentPage += 1;
               } else {
-                SimpleAlertDialog.showSimpleAlertDialog(
-                    context, 'Meesage', 'You have reached the item limit', () {
-                  Navigator.pop(context);
-                });
+                _finishPage = true;
               }
-            } else {
-              _finishPage = true;
             }
           },
           listenWhen: (context, state) {
@@ -97,7 +105,9 @@ class _UserListPageState extends State<UserListPage> {
           child: BlocBuilder<UserBloc, UserState>(builder: (context, state) {
             if (state is UserLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: ColorHelper.primary,),
+                child: CircularProgressIndicator(
+                  color: ColorHelper.primary,
+                ),
               );
             } else if (state is UserSuccess ||
                 state is UserMoreLoading ||
@@ -111,7 +121,12 @@ class _UserListPageState extends State<UserListPage> {
             } else if (state is UserError) {
               return Center(
                 child: PrimaryButton(
-                    text: 'Try Again', fontSize: 12, onPressed: () {}),
+                    text: 'Try Again',
+                    fontSize: 12,
+                    onPressed: () {
+                      context.read<UserBloc>().add(GetUserList());
+                      context.read<UserBloc>().page = 1;
+                    }),
               );
             } else {
               return Container();
@@ -126,7 +141,6 @@ class _UserListPageState extends State<UserListPage> {
     BuildContext context,
     UserState state,
   ) {
-    print('state: $state');
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowIndicator();
@@ -135,7 +149,7 @@ class _UserListPageState extends State<UserListPage> {
       child: ListView.builder(
           controller: _scrollController,
           physics: const ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(25),
           itemCount: _listDataUser.length + 1,
           itemBuilder: (context, index) {
             if (index != _listDataUser.length) {
@@ -217,23 +231,20 @@ class _UserListPageState extends State<UserListPage> {
                 ),
               );
             } else {
-              // if (state is UserMoreLoading) {
-              //   return Container(
-              //     width: double.infinity,
-              //     height: 80,
-              //     color: Colors.transparent,
-              //     // child: const Center(
-              //     //   child: CircularProgressIndicator(),
-              //     // ),
-              //   );
-              // } else
               if (state is UserMoreError) {
                 return Container(
                   width: double.infinity,
                   height: 80,
                   color: Colors.transparent,
+                  alignment: Alignment.center,
                   child: PrimaryButton(
-                      text: 'Try Again', fontSize: 12, onPressed: () {}),
+                      text: 'Try Again',
+                      fontSize: 12,
+                      onPressed: () {
+                        context.read<UserBloc>()
+                          ..page = _currentPage
+                          ..add(GetMoreUserList());
+                      }),
                 );
               } else {
                 return Container();

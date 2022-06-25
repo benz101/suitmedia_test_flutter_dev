@@ -12,15 +12,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserLoading());
       try {
         final response = await _apiService.getUserList(1, 10);
-        emit(UserSuccess(response));
-      } catch (e) {
-        emit(UserError(User(
+        if (response.page != 0 && response.data!.isNotEmpty) {
+          emit(UserSuccess(response)); 
+        }else{
+          emit(UserError(User(
             page: 0,
             perPage: 0,
             total: 0,
             totalPages: 0,
             data: [],
             support: Support(url: '', text: ''))));
+        }
+      } catch (e) {
+        emit(UserError(User(
+            page: null,
+            perPage: null,
+            total: null,
+            totalPages: null,
+            data: null,
+            support: null)));
       }
     });
 
@@ -28,15 +38,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserMoreLoading());
       try {
         final response = await _apiService.getUserList(page, 10);
-        emit(UserMoreSuccess(response));
-      } catch (e) {
-        emit(UserMoreError(User(
+        if (response.page != 0) {
+          emit(UserMoreSuccess(response)); 
+        }else{
+          emit(UserMoreError(User(
             page: 0,
             perPage: 0,
             total: 0,
             totalPages: 0,
             data: [],
             support: Support(url: '', text: ''))));
+        }
+      } catch (e) {
+        emit(UserMoreError(User(
+            page: null,
+            perPage: null,
+            total: null,
+            totalPages: null,
+            data: null,
+            support: null)));
       }
     });
   }

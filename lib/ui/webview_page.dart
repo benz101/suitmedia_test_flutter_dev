@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:suitmedia_test_flutter_dev/helper/color_helper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -16,8 +18,13 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-       navigationBar: const CupertinoNavigationBar(
-        middle: Text(''),
+       navigationBar:  CupertinoNavigationBar(
+         leading: GestureDetector(
+            child: SvgPicture.asset('assets/images/ic_arrow_left.svg'),
+            onTap: () {
+              Navigator.of(context).pop();
+            }),
+        middle: const Text(''),
       ),
       child: SafeArea(
         child: Container(

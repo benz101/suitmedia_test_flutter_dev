@@ -38,6 +38,7 @@ dependencies:
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
   webview_flutter: ^3.0.4
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:

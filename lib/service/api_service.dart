@@ -6,8 +6,6 @@ import 'package:suitmedia_test_flutter_dev/model/user.dart';
 
 class APIService {
   Future<User> getUserList(int page, int perPage) async {
-    Map<String, dynamic>? queryParameters = {"page": page, "per_page": perPage};
-  //  Uri uri = Uri.parse(URLHelper.url+'');
     try {
       final result = await http.get(
           Uri.parse(URLHelper.url+'?page=$page&per_page=$perPage'));
@@ -30,7 +28,7 @@ class APIService {
           total: 0,
           totalPages: 0,
           data: null,
-          support: Support(url: '', text: ''));
+          support:  Support(url: '', text: ''));
     }
   }
 }
