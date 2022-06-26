@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
               }),
           middle: state.id == 0 && state.firstName!.isEmpty
               ? const Text(
-                  'Home Page',
+                  'Home',
                   style: TextStyle(
                       color: ColorHelper.primary,
                       fontSize: 18,
