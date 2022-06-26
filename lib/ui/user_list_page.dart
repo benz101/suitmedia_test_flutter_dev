@@ -149,7 +149,7 @@ class _UserListPageState extends State<UserListPage> {
       child: ListView.builder(
           controller: _scrollController,
           physics: const ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
           itemCount: _listDataUser.length + 1,
           itemBuilder: (context, index) {
             if (index != _listDataUser.length) {
@@ -169,64 +169,65 @@ class _UserListPageState extends State<UserListPage> {
                 child: Container(
                   width: double.infinity,
                   height: 80,
-                  color: Colors.white,
-                  child: Card(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[300], shape: BoxShape.circle),
-                          child: valueAvatar != null
-                              ? CircleAvatar(
-                                  backgroundColor: Colors.grey[300],
-                                  backgroundImage: NetworkImage(valueAvatar),
-                                )
-                              : Container(),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                  child: Container(
-                                      color: Colors.transparent,
-                                      child: Text(
-                                        _listDataUser[index].firstName! +
-                                            ' ' +
-                                            _listDataUser[index].lastName!,
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                  decoration: const BoxDecoration(
+                       color: Colors.white,
+                       border: Border(bottom: BorderSide(color: ColorHelper.borderContainer, style: BorderStyle.solid, width: 0.5))
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300], shape: BoxShape.circle),
+                        child: valueAvatar != null
+                            ? CircleAvatar(
+                                backgroundColor: Colors.grey[300],
+                                backgroundImage: NetworkImage(valueAvatar),
+                              )
+                            : Container(),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                                child: Container(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      _listDataUser[index].firstName! +
+                                          ' ' +
+                                          _listDataUser[index].lastName!,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ))),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Flexible(
+                                child: Container(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      _listDataUser[index]
+                                          .email!
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          fontSize: 10,
                                           fontWeight: FontWeight.w500,
-                                        ),
-                                      ))),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Flexible(
-                                  child: Container(
-                                      color: Colors.transparent,
-                                      child: Text(
-                                        _listDataUser[index]
-                                            .email!
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xff686777)),
-                                      )))
-                            ],
-                          ),
-                        ))
-                      ],
-                    ),
+                                          color: Color(0xff686777)),
+                                    )))
+                          ],
+                        ),
+                      ))
+                    ],
                   ),
                 ),
               );
